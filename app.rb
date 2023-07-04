@@ -5,10 +5,13 @@ require 'sinatra/reloader'
 require 'pony'
 require 'sqlite3'
 
+def get_db
+	SQLite3::Database.new 'barbershop.sqlite3'
+end
 
 configure do
 	db = get_db
-	db.execute 'CREATE TABLE IF NOT EXISTS 
+	get_db.execute 'CREATE TABLE IF NOT EXISTS 
 	"Users"
 	(
 		"id" integer PRIMARY KEY AUTOINCREMENT NOT NULL,
@@ -119,8 +122,4 @@ end
 
 def errors_show hash
 	@error = hash.select { |key, _| params[key] == ""}.values.join(", ")
-end
-
-def get_db
-	SQLite3::Database.new 'barbershop.sqlite3'
 end
