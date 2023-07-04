@@ -5,9 +5,10 @@ require 'sinatra/reloader'
 require 'pony'
 require 'sqlite3'
 
+
 configure do
-	@db = SQLite3::Database.new 'barbershop.sqlite3'
-	@db.execute 'CREATE TABLE IF NOT EXISTS 
+	db = get_db
+	db.execute 'CREATE TABLE IF NOT EXISTS 
 	"Users"
 	(
 		"id" integer PRIMARY KEY AUTOINCREMENT NOT NULL,
@@ -56,9 +57,23 @@ post "/appointment" do
 		return erb :appointment
 	end
 
-	f = File.open "./public/users.txt", "a"
-	f.write "Username: #{@username}, Phone: #{@tel}, Date: #{@date}, Barber: #{@barber}, Color: #{@color}\n"
-	f.close
+	db = get_db
+	get_db.execute 'insert into 
+	Users 
+		(
+			Name,
+			Phone,
+			DateStamp,
+			Barber,
+			Color
+		)
+		values(?,?,?,?,?)', [@username, @tel, @date, @barber, @color]
+
+	# Запись в .txt file
+	# f = File.open "./public/users.txt", "a"
+	# f.write "Username: #{@username}, Phone: #{@tel}, Date: #{@date}, Barber: #{@barber}, Color: #{@color}\n"
+	# f.close
+
 	erb "Спасибо за запись!\nUsername: #{@username}, Phone: #{@tel}, Date: #{@date}, Barber: #{@barber}, Color: #{@color}"
 end
 
@@ -104,4 +119,8 @@ end
 
 def errors_show hash
 	@error = hash.select { |key, _| params[key] == ""}.values.join(", ")
+end
+
+def get_db
+	SQLite3::Database.new 'barbershop.sqlite3'
 end
