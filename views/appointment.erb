@@ -4,28 +4,23 @@
     <label for="username">Ваше Имя:</label>
     <input type="text"  name="username" class="form-control" placeholder="Ваше Имя" value="<%= @username %>">
   </div>
-
   <div class="form-group">
     <label for="tel">Ваш Телефон:</label>
     <input type="tel"  name="tel" class="form-control" placeholder="Телефон" value="<%= @tel %>">
   </div>
-
   <div class="form-group">
     <label for="date">Дата:</label>
     <input type="datetime-local"  name="date" class="form-control" value="<%= @date %>">
   </div>
-
   <div class="form-group">
     <label for="pet-select">Выберите Барбера:</label>
-
     <select id="aaa" name="barber" class="form-control" >
-        <option value="">--Please choose an option--</option>
-        <option value="Walter White">Walter White</option>
-        <option value="Jessie Pinkman">Jessie Pinkman</option>
-        <option value="Gus Fring">Gus Fring</option>
+      <option value="">--Please choose an option--</option>
+      <option value="Walter White" <%= @barber == 'Walter White' ? 'selected' : '' %>>Walter White</option>
+      <option value="Jessie Pinkman" <%= @barber == 'Jessie Pinkman' ? 'selected' : '' %>>Jessie Pinkman</option>
+      <option value="Gus Fring" <%= @barber == 'Gus Fring' ? 'selected' : '' %>>Gus Fring</option>
     </select>
   </div>
-
   <div class="form-group">
     <label for="color">Выберите Цвет:</label><br>
     <select id="color" name="color" class="form-control">
@@ -43,13 +38,10 @@
       <option value="#e1e1e1">Gray</option>
     </select>
   </div>
-
   <button type="submit" class="btn btn-primary">Записаться</button>
 </form>
-
 <script type="text/javascript">
-$(function(){
-  $('#color').simplecolorpicker();
-});
-
+  $(function(){
+    $('#color').simplecolorpicker();
+  });
 </script>
