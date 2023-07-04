@@ -3,6 +3,21 @@ require 'rubygems'
 require 'sinatra'
 require 'sinatra/reloader'
 require 'pony'
+require 'sqlite3'
+
+configure do
+	@db = SQLite3::Database.new 'barbershop.sqlite3'
+	@db.execute 'CREATE TABLE IF NOT EXISTS 
+	"Users"
+	(
+		"id" integer PRIMARY KEY AUTOINCREMENT NOT NULL,
+		"Name" varchar(128),
+		"Phone" varchar(128),
+		"DateStamp" varchar(128),
+		"Barber" varchar(128),
+		"Color" varchar(128)
+	)'
+end
 
 get '/' do
 	erb "Best Barber shop app.rb"	
