@@ -9,9 +9,22 @@ def get_db
 	SQLite3::Database.new 'barbershop.sqlite3'
 end
 
+barbers = [
+	'Saul Goodman',
+	'Mike Ehrmantraut',
+	'Skyler White',
+	'Hank Schrader',
+	'Tuco Salamanca',
+	'Lydia Rodarte-Quayle',
+	'Todd Alquist',
+	'Marie Schrader',
+	'Jane Margolis',
+	'Gustavo "The Cousins" Salamanca'
+]
+
 configure do
 	db = get_db
-	get_db.execute 'CREATE TABLE IF NOT EXISTS 
+	db.execute 'CREATE TABLE IF NOT EXISTS 
 	"Users"
 	(
 		"id" integer PRIMARY KEY AUTOINCREMENT NOT NULL,
@@ -21,7 +34,22 @@ configure do
 		"Barber" varchar(128),
 		"Color" varchar(128)
 	)'
+	db.execute 'CREATE TABLE IF NOT EXISTS 
+	"Barbers"
+	(
+			"id" integer PRIMARY KEY AUTOINCREMENT NOT NULL,
+			"Name" varchar(128)
+	)'
+
+	barbers.each do |name|
+		exists = db.execute("SELECT COUNT(*) FROM Barbers WHERE name = ?", name)[0][0]
+		if exists == 0
+			db.execute("INSERT INTO Barbers (name) VALUES (?)", name)
+		end
+	end
+	
 end
+
 
 get '/' do
 	erb "Best Barber shop app.rb"	
@@ -32,11 +60,21 @@ get "/about" do
 end
 
 get "/appointment" do
+	@db = get_db
+@db.results_as_hash = true
+
 	erb :appointment
 end
 
 get "/contacts" do
 	erb :contacts
+end
+
+get '/showusers' do
+	@db = get_db
+	@db.results_as_hash = true
+	
+  erb :showusers
 end
 
 post "/appointment" do
@@ -53,14 +91,14 @@ post "/appointment" do
 		:barber => "Выберите Барбера",
 		:color => "Выберите цвет "
 	}
-	
+	@db = get_db
+	@db.results_as_hash = true
 	errors_show hh
 
 	if @error != ""
 		return erb :appointment
 	end
-
-	db = get_db
+	
 	get_db.execute 'insert into 
 	Users 
 		(
