@@ -22,7 +22,7 @@
     <label for="pet-select">Выберите Барбера:</label>
     <select id="aaa" name="barber" class="form-control" >
       <option value="">--Please choose an option--</option>
-      <% @db.execute 'select * from Barbers' do |barber| %>
+      <% @barbers.each do |barber| %>
         <option value="<%= barber['Name'] %>" <%= barber['Name'] == @barber ? 'selected' : '' %>>
     <%= barber['Name'] %>
   </option>

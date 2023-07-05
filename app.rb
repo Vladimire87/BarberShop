@@ -61,8 +61,10 @@ get '/about' do
 end
 
 get '/appointment' do
-  @db = get_db
-  @db.results_as_hash = true
+  db = get_db
+  db.results_as_hash = true
+  @barbers = db.execute 'select * from Barbers'
+  
   erb :appointment
 end
 
@@ -71,8 +73,10 @@ get '/contacts' do
 end
 
 get '/showusers' do
-  @db = get_db
-  @db.results_as_hash = true
+  db = get_db
+  db.results_as_hash = true
+  @results = db.execute 'select*from Users order by id asc'
+  
   erb :showusers
 end
 
@@ -90,8 +94,7 @@ post '/appointment' do
     barber: 'Выберите Барбера',
     color: 'Выберите цвет'
   }
-  @db = get_db
-  @db.results_as_hash = true
+
   errors_show(hh)
 
   if @error != ''
