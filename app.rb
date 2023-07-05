@@ -11,6 +11,13 @@ def get_db
   return db
 end
 
+
+before do
+  db = get_db
+  @barbers = db.execute 'select * from Barbers'
+  @results = db.execute 'select*from Users order by id asc'
+end
+
 barbers = [
   'Saul Goodman',
   'Mike Ehrmantraut',
@@ -63,9 +70,6 @@ get '/about' do
 end
 
 get '/appointment' do
-  db = get_db
-  @barbers = db.execute 'select * from Barbers'
-
   erb :appointment
 end
 
@@ -74,9 +78,6 @@ get '/contacts' do
 end
 
 get '/showusers' do
-  db = get_db
-  @results = db.execute 'select*from Users order by id asc'
-  
   erb :showusers
 end
 
