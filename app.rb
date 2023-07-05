@@ -6,7 +6,9 @@ require 'pony'
 require 'sqlite3'
 
 def get_db
-  SQLite3::Database.new 'barbershop.sqlite3'
+  db = SQLite3::Database.new 'barbershop.sqlite3'
+  db.results_as_hash = true
+  return db
 end
 
 barbers = [
@@ -62,9 +64,8 @@ end
 
 get '/appointment' do
   db = get_db
-  db.results_as_hash = true
   @barbers = db.execute 'select * from Barbers'
-  
+
   erb :appointment
 end
 
@@ -74,7 +75,6 @@ end
 
 get '/showusers' do
   db = get_db
-  db.results_as_hash = true
   @results = db.execute 'select*from Users order by id asc'
   
   erb :showusers
@@ -131,27 +131,27 @@ post '/contacts' do
     return erb :contacts
   end
 
-  Pony.options = {
-    via: :smtp,
-    via_options: {
-      address: 'smtp.gmail.com',
-      port: '587',
-      enable_starttls_auto: true,
-      user_name: '',
-      password: '',
-      authentication: :plain,
-      domain: 'localhost:4567'
-    }
-  }
+  # Pony.options = {
+  #   via: :smtp,
+  #   via_options: {
+  #     address: 'smtp.gmail.com',
+  #     port: '587',
+  #     enable_starttls_auto: true,
+  #     user_name: '',
+  #     password: '',
+  #     authentication: :plain,
+  #     domain: 'localhost:4567'
+  #   }
+  # }
 
-  Pony.mail(
-    to: '',
-    from: email,
-    reply_to: email,
-    sender: email,
-    subject: 'Test Mail',
-    body: message
-  )
+  # Pony.mail(
+  #   to: '',
+  #   from: email,
+  #   reply_to: email,
+  #   sender: email,
+  #   subject: 'Test Mail',
+  #   body: message
+  # )
 
   erb 'Email sent successfully!'
 end
