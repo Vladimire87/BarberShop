@@ -21,7 +21,7 @@ GEM
       net-protocol
     pony (1.13.1)
       mail (>= 2.0)
-    rack (2.2.7)
+    rack (2.2.8.1)
     rack-protection (3.0.6)
       rack
     ruby2_keywords (0.0.5)
